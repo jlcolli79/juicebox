@@ -1,55 +1,4 @@
-// grab our client with destructuring from the export in index.js
-// const { client, getAllUsers } = require("./index");
-
-// async function testDB() {
-//   try {
-//     //connect the client to the database
-//     client.connect();
-
-//     //queries are promises, so we can await them
-//     const users = await getAllUsers();
-
-//     console.log(users);
-//   } catch (error) {
-//     console.error(error);
-//   } finally {
-//     // it's important to close out the client connection
-//     client.end();
-//   }
-// }
-
-// testDB();
-
 const { client, getAllUsers, createUser } = require("./index");
-
-async function createInitialUsers() {
-  try {
-    console.log("Starting to create users...");
-
-    const albert = await createUser({
-      username: "albert",
-      password: "bertie99",
-    });
-    console.log(albert);
-
-    const sandra = await createUser({
-      username: "sandra",
-      password: "2sandy4me",
-    });
-    console.log(sandra);
-
-    const glamgal = await createUser({
-      username: "glamgal",
-      password: "soglam",
-    });
-    console.log(glamgal);
-
-    console.log("Finished creating users!");
-  } catch (error) {
-    console.error("Error creating users!");
-    throw error;
-  }
-}
 
 async function dropTables() {
   try {
@@ -81,6 +30,35 @@ async function createTables() {
     console.log("Finished building tables!");
   } catch (error) {
     console.error("Error building tables!");
+    throw error;
+  }
+}
+
+async function createInitialUsers() {
+  try {
+    console.log("Starting to create users...");
+
+    const albert = await createUser({
+      username: "albert",
+      password: "bertie99",
+    });
+    console.log(albert);
+
+    const sandra = await createUser({
+      username: "sandra",
+      password: "2sandy4me",
+    });
+    console.log(sandra);
+
+    const glamgal = await createUser({
+      username: "glamgal",
+      password: "soglam",
+    });
+    console.log(glamgal);
+
+    console.log("Finished creating users!");
+  } catch (error) {
+    console.error("Error creating users!");
     throw error;
   }
 }
