@@ -83,34 +83,6 @@ async function createPost({ authorId, title, content, tags = [] }) {
   }
 }
 
-// async function updatePost(id, fields = {}) {
-//   const setString = Object.keys(fields)
-//     .map((key, index) => `"${key}"=$${index + 1}`)
-//     .join(", ");
-
-//   if (setString.length === 0) {
-//     return;
-//   }
-
-//   try {
-//     const {
-//       rows: [post],
-//     } = await client.query(
-//       /*sql*/ `
-//       UPDATE posts
-//       SET ${setString}
-//       WHERE id=${id}
-//       RETURNING *;
-//     `,
-//       Object.values(fields)
-//     );
-
-//     return post;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
 async function updatePost(postId, fields = {}) {
   // read off the tags & remove that field
   const { tags } = fields; // might be undefined
@@ -214,6 +186,25 @@ async function getUserById(userId) {
     }
 
     user.posts = await getPostsByUser(userId);
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getUserByUsername(username) {
+  try {
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+      SELECT *
+      FROM users
+      WHERE username = $1;
+    `,
+      [username]
+    );
 
     return user;
   } catch (error) {
@@ -344,6 +335,15 @@ async function getPostsByTagName(tagName) {
   }
 }
 
+async function getAllTags() {
+  const { rows } = await client.query(`
+    SELECT *
+    FROM tags;
+  `);
+
+  return rows;
+}
+
 module.exports = {
   client,
   createUser,
@@ -358,4 +358,6 @@ module.exports = {
   createTags,
   getPostById,
   getPostsByTagName,
+  getAllTags,
+  getUserByUsername,
 };
